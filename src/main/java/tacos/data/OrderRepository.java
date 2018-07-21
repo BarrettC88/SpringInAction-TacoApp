@@ -1,5 +1,8 @@
 package tacos.data;
 
-public interface OrderRepository {
+import tacos.Order;
 
+public interface OrderRepository {
+	
+	public Order save(Order order);
 }

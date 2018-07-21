@@ -1,5 +1,10 @@
 package tacos.data;
 
-public interface TacoRepository {
+import tacos.Taco;
 
+public interface TacoRepository {
+	
+	Taco save(Taco taco);
+	
+	
 }
