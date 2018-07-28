@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import tacos.Ingredient;
 import tacos.data.IngredientRepository;
-import tacos.data.JdbcIngredientRepository;
 
 @Component
 public class StringIngredientConverter implements Converter<String, Ingredient>{
@@ -24,8 +23,7 @@ public class StringIngredientConverter implements Converter<String, Ingredient>{
 	
 	@Override
 	public Ingredient convert(String id) {
-		// TODO Auto-generated method stub
-		return ingredRepo.findOne(id); 
+		return ingredRepo.findById(id).get(); 
 	}
 
 }
