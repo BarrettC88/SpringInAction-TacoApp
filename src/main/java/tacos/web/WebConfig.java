@@ -9,8 +9,9 @@ public class WebConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		// TODO Auto-generated method stub
 		registry.addViewController("/").setViewName("home");
+		registry.addViewController("/login");
+		registry.addViewController("/logout");
 	}
 
 }
