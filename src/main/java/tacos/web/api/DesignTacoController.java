@@ -1,13 +1,16 @@
 package tacos.web.api;
 
+import java.util.List;
 import java.util.Optional;
-
-import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import tacos.Order;
 import tacos.Taco;
+import tacos.data.OrderRepository;
 import tacos.data.TacoRepository;
 
 @RestController("B")
@@ -34,18 +38,28 @@ import tacos.data.TacoRepository;
 @Service()
 public class DesignTacoController{
 	private TacoRepository tacoRepo;
+	private OrderRepository orderRepo;
 	
 	/*@Autowired
 	EntityLinks entityLinks;*/
 	
-	public DesignTacoController(TacoRepository tacoRepo) {
+	public DesignTacoController(TacoRepository tacoRepo, OrderRepository orderRepo) {
 		this.tacoRepo = tacoRepo;
+		this.orderRepo = orderRepo;
 	}
 	
 	@GetMapping("/recent")
-	public Iterable<Taco> recentTacos() {
+	public Resources<Resource<Taco>> recentTacos() {
 		PageRequest page = PageRequest.of(0, 12, Sort.by("createdAt").descending());
-		return tacoRepo.findAll(page);
+		List<Taco> tacos = tacoRepo.findAll(page).getContent();
+		Resources<Resource<Taco>> recentResources = Resources.wrap(tacos);
+		
+		//The below is a bad ideas as the link is hardcoded with localhost
+		//recentResources.add(new Link("http://localhost:8080/design/recent", "recents"));
+		recentResources.add(ControllerLinkBuilder.linkTo(DesignTacoController.class).slash("recent").withRel("recents"));
+		//Another way we could achieve the above is the following:
+		//recentResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(DesignTacoController.class).recentTacos()).withRel("recents"));
+		return recentResources;
 	}
 	
 	@GetMapping("/{id}")
@@ -57,7 +71,7 @@ public class DesignTacoController{
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 	
-	@PostMapping(consumes="application/jason")
+	@PostMapping(path="/make/", consumes="application/json")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Taco postTaco(@RequestBody Taco taco) {
 		return tacoRepo.save(taco);
@@ -71,29 +85,29 @@ public class DesignTacoController{
 	} catch (EmptyResultDataAccessException e) {}
 	}
 	
-	/*@PutMapping("/{orderId}")
+	@PutMapping("/{orderId}")
 	public Order putOrder(@RequestBody Order order) {
-	return tacoRepo.save(order);
-	}*/
+	return orderRepo.save(order);
+	}
 	
-	/*@PatchMapping(path="/{orderId}", consumes="application/json")
+	@PatchMapping(path="/{orderId}", consumes="application/json")
 	public Order patchOrder(@PathVariable("orderId") Long orderId,
 	@RequestBody Order patch) {
-	Order order = repo.findById(orderId).get();
+	Order order = orderRepo.findById(orderId).get();
 	if (patch.getCustomerName() != null) {
-	order.setDeliveryName(patch.getCustomerName());
+	order.setCustomerName(patch.getCustomerName());
 	}
 	if (patch.getStreet() != null) {
-	order.setDeliveryStreet(patch.getStreet());
+	order.setStreet(patch.getStreet());
 	}
 	if (patch.getCity() != null) {
-	order.setDeliveryCity(patch.getCity());
+	order.setCity(patch.getCity());
 	}
 	if (patch.getState() != null) {
-	order.setDeliveryState(patch.getState());
+	order.setState(patch.getState());
 	}
 	if (patch.getZip() != null) {
-	order.setDeliveryZip(patch.getState());
+	order.setZip(patch.getState());
 	}
 	if (patch.getCcNumber() != null) {
 	order.setCcNumber(patch.getCcNumber());
@@ -104,7 +118,7 @@ public class DesignTacoController{
 	if (patch.getCcCVV() != null) {
 	order.setCcCVV(patch.getCcCVV());
 	}
-	return repo.save(order);
-	}*/
+	return orderRepo.save(order);
+	}
 
 }
