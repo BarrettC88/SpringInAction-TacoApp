@@ -2,6 +2,7 @@ package tacos.data;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
@@ -11,6 +12,6 @@ public interface TacoRepository extends CrudRepository<Taco, Long>{
 	
 	/*Taco save(Taco taco);*/
 	
-	public Iterable<Taco> findAll(Pageable pageable);
+	public Page<Taco> findAll(Pageable pageable);
 	
 }
