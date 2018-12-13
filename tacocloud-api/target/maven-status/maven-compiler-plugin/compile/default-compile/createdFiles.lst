@@ -1,0 +1,6 @@
+tacos\web\api\IngredientController.class
+tacos\web\api\DesignTacoController.class
+tacos\web\api\TacoResource.class
+tacos\web\api\IngredientResource.class
+tacos\web\api\IngredientResourceAssembler.class
+tacos\web\api\TacoResourceAssembler.class

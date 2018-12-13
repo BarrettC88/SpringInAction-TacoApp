@@ -1,0 +1,4 @@
+taocs\security\UserRepositoryUserDetailsService.class
+taocs\security\RegistrationForm.class
+taocs\security\RegistrationController.class
+tacos\security\SecurityConfig.class

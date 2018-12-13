@@ -1,0 +1,4 @@
+tacos\data\TacoRepository.class
+tacos\data\IngredientRepository.class
+tacos\data\UserRepository.class
+tacos\data\OrderRepository.class
