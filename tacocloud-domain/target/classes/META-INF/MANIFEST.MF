@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: tacocloud-domain
+Implementation-Version: 0.0.6-SNAPSHOT
+Built-By: USER
+Implementation-Vendor-Id: sia
+Build-Jdk: 1.8.0_77
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/taco-cloud-parent/tacocloud-domain
+Created-By: Maven Integration for Eclipse
+Main-Class: tacos.TacoCloudApplication
+

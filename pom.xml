@@ -30,5 +30,4 @@
       <module>tacocloud-security</module>
       <module>tacocloud-web</module>
     </modules>
-
 </project>
