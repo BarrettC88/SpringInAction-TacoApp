@@ -42,7 +42,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().
+		http
+	      .authorizeRequests()
+	        .antMatchers(HttpMethod.OPTIONS).permitAll() // needed for Angular/CORS
+	        .antMatchers(HttpMethod.POST, "/api/ingredients").permitAll()
+	        .antMatchers("/design", "/orders/**")
+	            .permitAll()
+	            //.access("hasRole('ROLE_USER')")
+	        .antMatchers(HttpMethod.PATCH, "/ingredients").permitAll()
+	        .antMatchers("/**").access("permitAll")
+	        
+	      .and()
+	        .formLogin()
+	          .loginPage("/login")
+	          
+	      .and()
+	        .httpBasic()
+	          .realmName("Taco Cloud")
+	          
+	      .and()
+	        .logout()
+	          .logoutSuccessUrl("/")
+	          
+	      .and()
+	        .csrf()
+	          .ignoringAntMatchers("/h2-console/**", "/ingredients/**", "/design", "/orders/**", "/api/**")
+
+	      // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+	      .and()  
+	        .headers()
+	          .frameOptions()
+	            .sameOrigin()
+	      ;
+		
+		/*http.authorizeRequests().
 		antMatchers("/orders").
 		hasRole("USER").
 		antMatchers("/**").permitAll().and().
@@ -50,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		loginPage("/login").and().logout().logoutSuccessUrl("/");
 		
 		http.csrf().disable();
-        http.headers().frameOptions().disable();
+        http.headers().frameOptions().disable();*/
 	}
 	
 	@Bean
